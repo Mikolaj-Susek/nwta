@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+</head>
+<body>
+<h1>Simply Calculator (0-9)</h1>
+<input type="number" id="num1" min="0" max="9">
+<input type="number" id="num2" min="0" max="9">
+<br><br>
+<button id="add">+</button>
+<button id="subtract">-</button>
+<button id="multiply">*</button>
+<button id="divide">/</button>
+<br><br>
+<div id="result"></div>
+<br>
+<button onclick="clearFields()">Erase</button>
+
+<script>
+    function getInputValue(id) {
+        const value = parseInt(document.getElementById(id).value);
+        if (isNaN(value) || value < 0 || value > 9) {
+            return null;
+        }
+        return value;
+    }
+
+    function displayResult(msg) {
+        document.getElementById("result").innerText = msg;
+    }
+
+    function clearFields() {
+        document.getElementById("num1").value = "";
+        document.getElementById("num2").value = "";
+        displayResult("");
+    }
+
+    function calculate(op) {
+        const a = getInputValue("num1");
+        const b = getInputValue("num2");
+
+        if (a === null || b === null) {
+            displayResult("out of range");
+            return;
+        }
+
+        let result;
+        switch(op) {
+            case '+': result = a + b; break;
+            case '-': result = a - b; break;
+            case '*': result = a * b; break;
+            case '/':
+                if (b === 0) {
+                    result = "Error!";
+                } else {
+                    result = (a / b).toFixed(2);
+                }
+                break;
+        }
+        displayResult(result);
+    }
+
+    document.getElementById("add").onclick = function() { calculate('+'); };
+    document.getElementById("subtract").onclick = function() { calculate('-'); };
+    document.getElementById("multiply").onclick = function() { calculate('*'); };
+    document.getElementById("divide").onclick = function() { calculate('/'); };
+</script>
+</body>
+</html>
