@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+<h1>Login</h1>
+<label><input type="checkbox" id="enable-username"> login</label>
+<input type="text" id="username-input" placeholder="Username" disabled>
+<br><br>
+<label><input type="checkbox" id="enable-password"> hasło</label>
+<input type="password" id="password-input" placeholder="Password" disabled>
+<br><br>
+<button id="login-button">Login</button>
+<p id="message-display"></p>
+
+<script>
+    document.getElementById('enable-username').addEventListener('change', function () {
+        document.getElementById('username-input').disabled = !this.checked;
+    });
+
+    document.getElementById('enable-password').addEventListener('change', function () {
+        document.getElementById('password-input').disabled = !this.checked;
+    });
+
+    document.getElementById('login-button').addEventListener('click', () => {
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+
+        if (usernameInput.disabled || passwordInput.disabled) {
+            document.getElementById('message-display').textContent = 'Please enable and fill out both fields.';
+            return;
+        }
+
+        const username = usernameInput.value;
+        const password = passwordInput.value;
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("password", password);
+
+        fetch('/api/login', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('message-display').textContent = data.message;
+        })
+        .catch(() => {
+            document.getElementById('message-display').textContent = 'Login failed';
+        });
+    });
+</script>
+</body>
+</html>
